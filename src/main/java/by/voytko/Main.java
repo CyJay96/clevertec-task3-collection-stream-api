@@ -8,6 +8,7 @@ import by.voytko.model.Person;
 import by.voytko.util.Util;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.OptionalInt;
@@ -130,7 +131,13 @@ public class Main {
 
     private static void task12() throws IOException {
         List<Person> people = Util.getPersons();
-//        Продолжить...
+        people.stream()
+                .filter(person -> person.getGender().equals("Male"))
+                .filter(person -> LocalDate.now().compareTo(person.getDateOfBirth()) >= 18 &&
+                        LocalDate.now().compareTo(person.getDateOfBirth()) < 27)
+                .sorted(Comparator.comparing(Person::getRecruitmentGroup))
+                .limit(200)
+                .forEach(System.out::println);
     }
 
     private static void task13() throws IOException {
