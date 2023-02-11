@@ -42,8 +42,11 @@ public class Main {
 
     private static void task2() throws IOException {
         List<Animal> animals = Util.getAnimals();
-        //        animals.stream() Продолжить ...
-
+        animals.stream()
+                .filter(animal -> animal.getOrigin().equals("Japanese"))
+                .filter(animal -> animal.getGender().equals("Female"))
+                .map(animal -> animal.getBread().toUpperCase())
+                .forEach(System.out::println);
     }
 
     private static void task3() throws IOException {
