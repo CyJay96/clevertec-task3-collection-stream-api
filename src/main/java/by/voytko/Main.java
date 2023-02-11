@@ -168,7 +168,53 @@ public class Main {
 
     private static void task14() throws IOException {
         List<Car> cars = Util.getCars();
-        //        Продолжить...
+
+        List<Car> turkmenistanCars = cars.stream()
+                .filter(car -> car.getCarMake().equals("Jaguar") || car.getColor().equals("White"))
+                .toList();
+        cars.removeAll(turkmenistanCars);
+
+        List<Car> uzbekistanCars = cars.stream()
+                .filter(car -> car.getMass() < 1500 ||
+                        car.getCarMake().equals("BMW") || car.getCarMake().equals("Lexus") ||
+                        car.getCarMake().equals("Chrysler") || car.getCarMake().equals("Toyota"))
+                .toList();
+        cars.removeAll(uzbekistanCars);
+
+        List<Car> kazakhstanCars = cars.stream()
+                .filter(car -> car.getColor().equals("Black") && car.getMass() > 4000 ||
+                        car.getCarMake().equals("GMC") || car.getCarMake().equals("Dodge"))
+                .toList();
+        cars.removeAll(kazakhstanCars);
+
+        List<Car> kyrgyzstanCars = cars.stream()
+                .filter(car -> car.getReleaseYear() < 1982 ||
+                        car.getCarMake().equals("Civic") || car.getCarMake().equals("Cherokee"))
+                .toList();
+        cars.removeAll(kyrgyzstanCars);
+
+        List<Car> russiaCars = cars.stream()
+                .filter(car -> !car.getColor().equals("Yellow") && !car.getColor().equals("Red") &&
+                        !car.getColor().equals("Green") && !car.getColor().equals("Blue") ||
+                        car.getPrice() > 40000)
+                .toList();
+        cars.removeAll(russiaCars);
+
+        List<Car> mongoliaCars = cars.stream()
+                .filter(car -> car.getVin().contains("59"))
+                .toList();
+
+        List<Double> costs =
+                Stream.of(turkmenistanCars, uzbekistanCars, kazakhstanCars, kyrgyzstanCars, russiaCars, mongoliaCars)
+                        .map(list -> list.stream().mapToInt(Car::getMass).sum() * 7.14)
+                        .toList();
+
+        double costSum = costs.stream()
+                .mapToDouble(cost -> cost)
+                .sum();
+
+        System.out.println(costs);
+        System.out.println(costSum);
     }
 
     private static void task15() throws IOException {
