@@ -13,6 +13,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.OptionalInt;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -142,7 +143,27 @@ public class Main {
 
     private static void task13() throws IOException {
         List<House> houses = Util.getHouses();
-        //        Продолжить...
+        List<Person> hospitalPeople = houses.stream()
+                .filter(house -> house.getBuildingType().equals("Hospital"))
+                .map(House::getPersonList)
+                .flatMap(List::stream)
+                .toList();
+        List<Person> otherPeople = houses.stream()
+                .filter(house -> !house.getBuildingType().equals("Hospital"))
+                .map(House::getPersonList)
+                .flatMap(List::stream)
+                .filter(person -> LocalDate.now().compareTo(person.getDateOfBirth()) >= 0 &&
+                        LocalDate.now().compareTo(person.getDateOfBirth()) < 18 ||
+                        (person.getGender().equals("Female") &&
+                                LocalDate.now().compareTo(person.getDateOfBirth()) > 60) ||
+                        (person.getGender().equals("Male") &&
+                                LocalDate.now().compareTo(person.getDateOfBirth()) > 65))
+                .toList();
+        Stream.concat(
+                        hospitalPeople.stream(),
+                        otherPeople.stream())
+                .limit(500)
+                .forEach(System.out::println);
     }
 
     private static void task14() throws IOException {
