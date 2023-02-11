@@ -78,7 +78,9 @@ public class Main {
 
     private static void task6() throws IOException {
         List<Animal> animals = Util.getAnimals();
-        //        animals.stream() Продолжить ...
+        boolean isAllMaleOrFemale = animals.stream()
+                .allMatch(animal -> animal.getGender().equals("Male") || animal.getGender().equals("Female"));
+        System.out.println(isAllMaleOrFemale);
     }
 
     private static void task7() throws IOException {
