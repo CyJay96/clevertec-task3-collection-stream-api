@@ -173,6 +173,19 @@ public class Main {
 
     private static void task15() throws IOException {
         List<Flower> flowers = Util.getFlowers();
-        //        Продолжить...
+        double sumPrice = flowers.stream()
+                .sorted(Comparator.comparing(Flower::getOrigin).reversed()
+                        .thenComparing(Flower::getPrice)
+                        .thenComparing(Flower::getWaterConsumptionPerDay).reversed()
+                        .thenComparing(Flower::getCommonName).reversed())
+                .filter(flower -> (flower.getCommonName().charAt(0) >= 'C' &&
+                        flower.getCommonName().charAt(0) <= 'S'))
+                .filter(Flower::isShadePreferred)
+                .filter(flower -> flower.getFlowerVaseMaterial().contains("Glass") ||
+                        flower.getFlowerVaseMaterial().contains("Aluminum") ||
+                        flower.getFlowerVaseMaterial().contains("Steel"))
+                .mapToDouble(flower -> flower.getPrice() + flower.getWaterConsumptionPerDay() * (365 * 5 + 1) * 1.39)
+                .sum(); // (365 * 5 + 1) - take into account 1 leap year
+        System.out.println(sumPrice);
     }
 }
