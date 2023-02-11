@@ -103,7 +103,12 @@ public class Main {
 
     private static void task9() throws IOException {
         List<Animal> animals = Util.getAnimals();
-        //        animals.stream() Продолжить ...
+        OptionalInt minLengthOptional = animals.stream()
+                .map(Animal::getBread)
+                .map(String::toCharArray)
+                .mapToInt(bread -> bread.length)
+                .min();
+        System.out.println(minLengthOptional.isPresent() ? minLengthOptional.getAsInt() : 0);
     }
 
     private static void task10() throws IOException {
