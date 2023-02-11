@@ -10,6 +10,7 @@ import by.voytko.util.Util;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.OptionalInt;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -92,7 +93,12 @@ public class Main {
 
     private static void task8() throws IOException {
         List<Animal> animals = Util.getAnimals();
-        //        animals.stream() Продолжить ...
+        OptionalInt maxAgeOptional = animals.stream()
+                .sorted(Comparator.comparing(Animal::getBread))
+                .limit(100)
+                .mapToInt(Animal::getAge)
+                .max();
+        System.out.println(maxAgeOptional.isPresent() ? maxAgeOptional.getAsInt() : 0);
     }
 
     private static void task9() throws IOException {
