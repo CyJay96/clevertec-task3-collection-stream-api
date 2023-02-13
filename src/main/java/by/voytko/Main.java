@@ -66,8 +66,8 @@ public class Main {
         List<Animal> animals = Util.getAnimals();
 
         animals.stream()
-                .filter(animal -> animal.getOrigin().equals(ORIGIN))
-                .filter(animal -> animal.getGender().equals(GENDER_FEMALE))
+                .filter(animal -> ORIGIN.equals(animal.getOrigin()))
+                .filter(animal -> GENDER_FEMALE.equals(animal.getGender()))
                 .map(animal -> animal.getBread().toUpperCase())
                 .forEach(System.out::println);
     }
@@ -93,7 +93,7 @@ public class Main {
         List<Animal> animals = Util.getAnimals();
 
         long femaleCount = animals.stream()
-                .filter(animal -> animal.getGender().equals(GENDER_MALE))
+                .filter(animal -> GENDER_MALE.equals(animal.getGender()))
                 .count();
 
         System.out.println(femaleCount);
@@ -108,7 +108,7 @@ public class Main {
 
         boolean isHungarianExists = animals.stream()
                 .filter(animal -> animal.getAge() >= LOWER_BOUND_YEAR && animal.getAge() <= UPPER_BOUND_YEAR)
-                .anyMatch(animal -> animal.getOrigin().equals(ORIGIN));
+                .anyMatch(animal -> ORIGIN.equals(animal.getOrigin()));
 
         System.out.println(isHungarianExists);
     }
@@ -120,7 +120,7 @@ public class Main {
         List<Animal> animals = Util.getAnimals();
 
         boolean isAllMaleOrFemale = animals.stream()
-                .allMatch(animal -> animal.getGender().equals(GENDER_MALE) || animal.getGender().equals(GENDER_FEMALE));
+                .allMatch(animal -> GENDER_MALE.equals(animal.getGender()) || GENDER_FEMALE.equals(animal.getGender()));
 
         System.out.println(isAllMaleOrFemale);
     }
@@ -131,7 +131,7 @@ public class Main {
         List<Animal> animals = Util.getAnimals();
 
         boolean isNoOceania = animals.stream()
-                .noneMatch(animal -> animal.getOrigin().equals(ORIGIN));
+                .noneMatch(animal -> ORIGIN.equals(animal.getOrigin()));
 
         System.out.println(isNoOceania);
     }
@@ -183,13 +183,14 @@ public class Main {
         List<Animal> animals = Util.getAnimals();
 
         Double averageAgeIndonesian = animals.stream()
-                .filter(animal -> animal.getOrigin().equals(ORIGIN))
+                .filter(animal -> ORIGIN.equals(animal.getOrigin()))
                 .collect(Collectors.averagingInt(Animal::getAge)); // averagingInt example
 
         System.out.println(averageAgeIndonesian);
     }
 
     private static void task12() throws IOException {
+        final String GENDER_MALE = "Male";
         final int LOWER_BOUND_YEAR = 18;
         final int UPPER_BOUND_YEAR = 27;
         final int MAX_PEOPLE = 200;
@@ -197,7 +198,7 @@ public class Main {
         List<Person> people = Util.getPersons();
 
         people.stream()
-                .filter(person -> person.getGender().equals("Male"))
+                .filter(person -> GENDER_MALE.equals(person.getGender()))
                 .filter(person -> LocalDate.now().compareTo(person.getDateOfBirth()) >= LOWER_BOUND_YEAR &&
                         LocalDate.now().compareTo(person.getDateOfBirth()) < UPPER_BOUND_YEAR)
                 .sorted(Comparator.comparing(Person::getRecruitmentGroup))
@@ -219,12 +220,12 @@ public class Main {
 
         houses.stream()
                 .flatMap(house -> house.getPersonList().stream()
-                        .map(person -> Map.entry(house.getBuildingType().equals(BUILDING_TYPE) ? 1 :
+                        .map(person -> Map.entry(BUILDING_TYPE.equals(house.getBuildingType()) ? 1 :
                                 LocalDate.now().compareTo(person.getDateOfBirth()) >= ZERO &&
                                         LocalDate.now().compareTo(person.getDateOfBirth()) < YOUNG_YEAR ||
-                                        (person.getGender().equals(GENDER_FEMALE) &&
+                                        (GENDER_FEMALE.equals(person.getGender()) &&
                                                 LocalDate.now().compareTo(person.getDateOfBirth()) > OLD_FEMALE_YEAR) ||
-                                        (person.getGender().equals(GENDER_MALE) &&
+                                        (GENDER_MALE.equals(person.getGender()) &&
                                                 LocalDate.now().compareTo(person.getDateOfBirth()) > OLD_MALE_YEAR) ? 2 : 3, person)))
                 .sorted(Map.Entry.comparingByKey())
                 .limit(MAX_PEOPLE)
@@ -235,16 +236,16 @@ public class Main {
     private static void task14() throws IOException {
         final double TON_COST = 7.14;
 
-        Predicate<Car> isTurkmenistanCar = car -> car.getCarMake().equals("Jaguar") || car.getColor().equals("White");
+        Predicate<Car> isTurkmenistanCar = car -> "Jaguar".equals(car.getCarMake()) || "White".equals(car.getColor());
         Predicate<Car> isUzbekistanCar = car -> car.getMass() < 1500 ||
-                car.getCarMake().equals("BMW") || car.getCarMake().equals("Lexus") ||
-                car.getCarMake().equals("Chrysler") || car.getCarMake().equals("Toyota");
-        Predicate<Car> isKazakhstanCar = car -> car.getColor().equals("Black") && car.getMass() > 4000 ||
-                car.getCarMake().equals("GMC") || car.getCarMake().equals("Dodge");
+                "BMW".equals(car.getCarMake()) || "Lexus".equals(car.getCarMake()) ||
+                "Chrysler".equals(car.getCarMake()) || "Toyota".equals(car.getCarMake());
+        Predicate<Car> isKazakhstanCar = car -> "Black".equals(car.getColor()) && car.getMass() > 4000 ||
+                "GMC".equals(car.getCarMake()) || "Dodge".equals(car.getCarMake());
         Predicate<Car> isKyrgyzstanCar = car -> car.getReleaseYear() < 1982 ||
-                car.getCarMake().equals("Civic") || car.getCarMake().equals("Cherokee");
-        Predicate<Car> isCarForRussia = car -> !car.getColor().equals("Yellow") && !car.getColor().equals("Red") &&
-                !car.getColor().equals("Green") && !car.getColor().equals("Blue") ||
+                "Civic".equals(car.getCarMake()) || "Cherokee".equals(car.getCarMake());
+        Predicate<Car> isCarForRussia = car -> !"Yellow".equals(car.getColor()) && !"Red".equals(car.getColor()) &&
+                !"Green".equals(car.getColor()) && !"Blue".equals(car.getColor()) ||
                 car.getPrice() > 40000;
         Predicate<Car> isMongoliaCar = car -> car.getVin().contains("59");
 
@@ -260,18 +261,15 @@ public class Main {
                 .filter(carMap -> carMap.getKey().compareTo(7) != 0)
                 .collect(Collectors.groupingBy(Map.Entry::getKey));
 
-        List<Double> costs = groupedCars.values().stream()
+        double costsSum = groupedCars.values().stream()
                 .map(list -> list.stream()
                         .map(Map.Entry::getValue)
                         .mapToDouble(Car::getMass)
                         .sum() * TON_COST)
-                .toList();
-
-        double costsSum = costs.stream()
+                .peek(System.out::println)
                 .mapToDouble(cost -> cost)
                 .sum();
 
-        System.out.println(costs);
         System.out.println(costsSum);
     }
 
