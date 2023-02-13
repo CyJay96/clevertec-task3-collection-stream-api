@@ -5,16 +5,24 @@ import by.voytko.model.Car;
 import by.voytko.model.Flower;
 import by.voytko.model.House;
 import by.voytko.model.Person;
+import by.voytko.model.task16.GenreType;
+import by.voytko.model.task16.Performer;
+import by.voytko.model.task16.Song;
 import by.voytko.util.Util;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalInt;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static by.voytko.model.task16.GenreType.METAL;
+import static by.voytko.model.task16.GenreType.POP;
+import static by.voytko.model.task16.GenreType.ROCK;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -33,6 +41,7 @@ public class Main {
         task13();
         task14();
         task15();
+        task16();
     }
 
     private static void task1() throws IOException {
@@ -297,5 +306,27 @@ public class Main {
                 .sum();
 
         System.out.println(sumPrice);
+    }
+
+    private static void task16() throws IOException {
+        final int MAX_POPULAR_PERFORMERS = 6;
+        final LocalDate MIN_SONG_DATE = LocalDate.of(2010, Month.JANUARY, 1);
+
+        List<Performer> performers = Util.getPerformers();
+
+        Map<GenreType, List<Performer>> groupedPerformers = performers.stream()
+                .sorted(Comparator.comparing(performer -> performer.getSongs().stream()
+                        .mapToInt(Song::getLikesCount)
+                        .sum()))
+                .limit(MAX_POPULAR_PERFORMERS)
+                .filter(performer -> performer.getSongs().stream()
+                        .allMatch(song -> song.getReleaseDate().isAfter(MIN_SONG_DATE)))
+                .filter(performer -> ROCK.equals(performer.getGenre()) ||
+                        POP.equals(performer.getGenre()) ||
+                        METAL.equals(performer.getGenre()))
+                .sorted(Comparator.comparing(Performer::getName))
+                .collect(Collectors.groupingBy(Performer::getGenre));
+
+        System.out.println(groupedPerformers);
     }
 }

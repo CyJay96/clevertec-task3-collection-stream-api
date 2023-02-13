@@ -5,6 +5,7 @@ import by.voytko.model.Car;
 import by.voytko.model.Flower;
 import by.voytko.model.House;
 import by.voytko.model.Person;
+import by.voytko.model.task16.Performer;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,6 +22,7 @@ public class Util {
     public static final String recruitsDataFileName = "src\\main\\resources\\recruits.json";
     public static final String carsDataFileName = "src\\main\\resources\\cars.json";
     public static final String flowersDataFileName = "src\\main\\resources\\flowers.json";
+    public static final String performersDataFileName = "src\\main\\resources\\performers.json";
     public static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
     public static List<Animal> getAnimals() throws IOException {
@@ -58,6 +60,11 @@ public class Util {
                 new House(9, "Civil building", personList.subList(800, 899)),
                 new House(9, "Civil building", personList.subList(900, 999))
         );
+    }
+
+    public static List<Performer> getPerformers() throws IOException {
+        return newMapper().readValue(new File(performersDataFileName), new TypeReference<>() {
+        });
     }
 
     private static ObjectMapper newMapper() {
